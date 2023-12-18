@@ -1,5 +1,4 @@
 import { LeadSchema } from '@/types/models'
-import { wait } from '@/util/wait'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
@@ -12,11 +11,15 @@ export default async function handler(
   
   const parseResult = LeadSchema.safeParse(req.body.lead)
 
-  if (!parseResult.success) {
-    return res.status(400).json({error: parseResult.error})
+  const randomlyFailed = Math.floor(Math.random() * 2) === 0;
+
+  if (randomlyFailed) {
+    return res.status(200).json({success: false, message: 'Unable to sign up' })
   }
 
-  await wait(3000)
+  if (!parseResult.success) {
+    return res.status(200).json({success: false, message: parseResult.error})
+  }
 
   res.status(200).json({success: true})
 }

@@ -17,6 +17,6 @@ export default function handler(
   }
 
   signUpInSkillMap(parseResult.data).then((result) => {
-    res.status(result.success ? 200 : 500).json(result)
+    res.status(200).json(result)
   })
 }

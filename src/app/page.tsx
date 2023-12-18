@@ -1,6 +1,7 @@
 'use client';
 
 import { LeadsTable } from '@/components/LeadsTable';
+import { SignupResult } from '@/scrape/signupInSkillMap';
 import { Lead } from '@/types/models';
 import { downloadStringAsFile } from '@/util/downloadStringAsFile';
 import { CsvParseOutput, parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput';
@@ -9,14 +10,21 @@ import { Typography, Button, Box } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { ChangeEvent, useState } from 'react';
 
-function signupLead (lead: Lead) {
-  return fetch('/api/fake-signup', {
+const REAL_URL = '/api/signup-in-skillmap'
+const TEST_URL = '/api/fake-signup'
+
+async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
+  const url = opts?.useTestUrl ? TEST_URL : REAL_URL;
+
+  const result = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({ lead }),
     headers: {
       'Content-Type': 'application/json'
     }
   })
+
+  return result.json() as Promise<SignupResult>;
 }
 
 export default function Home() {
@@ -30,9 +38,7 @@ export default function Home() {
 
   const signupMutation = useMutation({
     mutationFn: (leads: Lead[]) => {
-      const results = leads.map(lead => signupLead(lead))
-
-      return Promise.allSettled(results)
+      return Promise.all(leads.map(lead => signupLead(lead, { useTestUrl: false })))
     }
   })
 
@@ -42,9 +48,14 @@ export default function Home() {
         <Typography variant='h4'>
           Lets sign up some leads in skillmap
         </Typography>
-        <Typography variant='body1'>
-          Upload your leads in .csv format below 👇
-        </Typography>
+        <ol>
+          <li><Typography variant='body1'>Download the csv template</Typography></li>
+          <li><Typography variant='body1'>Fill it up with your leads</Typography></li>
+          <li><Typography variant='body1'>Upload it here</Typography></li>
+          <li><Typography variant='body1'>Click the signup button in the bottom right</Typography></li>
+          <li><Typography variant='body1'>Wait for a bit...</Typography></li>
+          <li><Typography variant='body1'>Done! Don&apos;t forget to double check your leads are properly registered in skillmap</Typography></li>
+        </ol>
         <Box display='flex' gap={1} paddingTop={2}>
           <Button
             variant="contained"
@@ -72,7 +83,7 @@ export default function Home() {
           <Box flex={1} >
             <Typography color='GrayText'>
             </Typography>
-            {csvOutput.validLeads && <LeadsTable leads={csvOutput.validLeads} />}
+            {csvOutput.validLeads && <LeadsTable leads={csvOutput.validLeads} results={signupMutation.data} />}
           </Box>
 
           <Box display='flex' justifyContent='flex-end' alignItems='center' gap={2} borderTop='1px solid lightgray' paddingTop={2}>
@@ -81,7 +92,7 @@ export default function Home() {
             </Typography>
             <LoadingButton
               variant='contained'
-              loadingIndicator="Ok, hold on..." 
+              loadingIndicator="Ok, hold on..."
               loading={signupMutation.isPending}
               onClick={() => signupMutation.mutate(csvOutput.validLeads)}
             >
