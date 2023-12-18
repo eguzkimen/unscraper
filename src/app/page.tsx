@@ -36,8 +36,6 @@ export default function Home() {
     }
   })
 
-  console.log(signupMutation.isPending)
-
   return (
     <Box height='100vh' padding={6} boxSizing='border-box' display='flex' flexDirection='column' gap={4}>
       <Box >
