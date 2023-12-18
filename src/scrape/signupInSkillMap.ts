@@ -69,6 +69,9 @@ export async function signUpInSkillMap({ firstName, lastName, email }: Lead): Pr
     await wait()
     await page.click('xpath/' + SUBMIT_NAME_BUTTON_XPATH)
 
+    // Closing the browser here is important to avoid a memory leak
+    await browser.close()
+
     return {
       success: true
     }
