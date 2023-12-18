@@ -43,7 +43,7 @@ export default function Home() {
   })
 
   return (
-    <Box height='100vh' padding={6} boxSizing='border-box' display='flex' flexDirection='column' gap={4}>
+    <Box overflow='hidden' height='100vh' padding={6} boxSizing='border-box' display='flex' flexDirection='column' gap={4}>
       <Box >
         <Typography variant='h4'>
           Lets sign up some leads in skillmap
@@ -80,7 +80,7 @@ export default function Home() {
       </Box>
       {csvOutput && (
         <>
-          <Box flex={1} >
+          <Box flex={1} overflow='auto' >
             <Typography color='GrayText'>
             </Typography>
             {csvOutput.validLeads && <LeadsTable leads={csvOutput.validLeads} results={signupMutation.data} />}
