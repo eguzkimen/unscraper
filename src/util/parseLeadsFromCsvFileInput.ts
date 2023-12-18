@@ -2,7 +2,7 @@ import { Lead, LeadSchema } from "@/types/models";
 import { parse } from "csv-parse/sync";
 import { ChangeEvent } from "react";
 
-type CsvParseOutput = {
+export type CsvParseOutput = {
   validLeads: Lead[];
   invalidLeads: unknown[];
 }
