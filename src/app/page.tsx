@@ -36,7 +36,7 @@ export default function Home() {
     setCsvOputput(output)
   }
 
-  async function signUpLeads (leads: Lead[], index: number = 50) {
+  async function signUpLeads (leads: Lead[], index: number = 0) {
     const lead = leads[index]
 
     if (!lead) {
