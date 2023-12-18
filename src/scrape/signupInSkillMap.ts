@@ -1,5 +1,5 @@
 import { SKILLMAP_ACCESS_CODE, SKILLMAP_DEFAULT_PASS } from '@/configs'
-import { Lead } from '@/types/models'
+import { Lead, SignupResult } from '@/types/models'
 import { wait } from '@/util/wait'
 import puppeteer from 'puppeteer'
 
@@ -15,17 +15,12 @@ const SIGN_UP_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/a
 const SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/form/button'
 const SUBMIT_NAME_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/form/button'
 
-export type SignupResult = {
-  success: boolean,
-  message?: string
-}
-
 export async function signUpInSkillMap({ firstName, lastName, email }: Lead): Promise<SignupResult> {
   try {
     const browser = await puppeteer.launch({ headless: true })
     const page = await browser.newPage()
 
-    page.setDefaultTimeout(3000)
+    page.setDefaultTimeout(3_000)
 
     await page.goto('https://skillmap.app/mobile/guest/authentication/register')
 

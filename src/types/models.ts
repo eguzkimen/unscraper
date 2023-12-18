@@ -7,3 +7,8 @@ export const LeadSchema = z.object({
 })
 
 export type Lead = z.infer<typeof LeadSchema>
+
+export type SignupResult = {
+  success: boolean,
+  message?: string
+}

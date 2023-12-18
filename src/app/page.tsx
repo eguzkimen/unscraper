@@ -1,13 +1,11 @@
 'use client'
 
 import { LeadsTable } from '@/components/LeadsTable'
-import { SignupResult } from '@/scrape/signupInSkillMap'
-import { Lead } from '@/types/models'
+import { Lead, SignupResult } from '@/types/models'
 import { downloadStringAsFile } from '@/util/downloadStringAsFile'
 import { CsvParseOutput, parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput'
 import { LoadingButton } from '@mui/lab'
 import { Typography, Button, Box } from '@mui/material'
-import { useMutation } from '@tanstack/react-query'
 import { ChangeEvent, useState } from 'react'
 
 const REAL_URL = '/api/signup-in-skillmap'
@@ -29,6 +27,8 @@ async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
 
 export default function Home() {
   const [csvOutput, setCsvOputput] = useState<CsvParseOutput | null>(null)
+  const [results, setResults] = useState<Record<string, SignupResult>>({})
+  const [loading, setLoading] = useState(false)
 
   async function handleFileInputChange(event: ChangeEvent<HTMLInputElement>) {
     const output = await parseLeadsFromCSVFileInput(event)
@@ -36,11 +36,22 @@ export default function Home() {
     setCsvOputput(output)
   }
 
-  const signupMutation = useMutation({
-    mutationFn: (leads: Lead[]) => {
-      return Promise.all(leads.map(lead => signupLead(lead, { useTestUrl: false })))
+  async function signUpLeads (leads: Lead[], index: number = 50) {
+    const lead = leads[index]
+
+    if (!lead) {
+      setLoading(false)
+      return
     }
-  })
+
+    setLoading(true)
+
+    const result = await signupLead(lead, {useTestUrl: false})
+
+    setResults((prevResults) => ({...prevResults, [lead.email]: result}))
+
+    signUpLeads(leads, index + 1)
+  }
 
   return (
     <Box overflow='hidden' height='100vh' padding={6} boxSizing='border-box' display='flex' flexDirection='column' gap={4}>
@@ -83,7 +94,7 @@ export default function Home() {
           <Box flex={1} overflow='auto' >
             <Typography color='GrayText'>
             </Typography>
-            {csvOutput.validLeads && <LeadsTable leads={csvOutput.validLeads} results={signupMutation.data} />}
+            {csvOutput.validLeads && <LeadsTable leads={csvOutput.validLeads} results={results} />}
           </Box>
 
           <Box display='flex' justifyContent='flex-end' alignItems='center' gap={2} borderTop='1px solid lightgray' paddingTop={2}>
@@ -93,8 +104,8 @@ export default function Home() {
             <LoadingButton
               variant='contained'
               loadingIndicator="Ok, hold on..."
-              loading={signupMutation.isPending}
-              onClick={() => signupMutation.mutate(csvOutput.validLeads)}
+              loading={loading}
+              onClick={() => signUpLeads(csvOutput.validLeads)}
             >
               Sign up {csvOutput.validLeads?.length} valid leads in skillmap
             </LoadingButton>
