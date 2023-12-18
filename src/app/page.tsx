@@ -1,10 +1,10 @@
 'use client';
 
-import { Lead, LeadSchema } from '@/types/models';
+import { LeadsTable } from '@/components/LeadsTable';
+import { Lead } from '@/types/models';
 import { downloadStringAsFile } from '@/util/downloadStringAsFile';
 import { parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput';
-import { Typography, Button, Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import { parse } from 'csv-parse/sync';
+import { Typography, Button, Box } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 
 export default function Home() {
@@ -47,26 +47,7 @@ export default function Home() {
 
         </Button>
       </Box>
-      <TableContainer>
-        <Table size='small' aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Email</TableCell>
-              <TableCell>First Name</TableCell>
-              <TableCell>Last Name</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {validLeads?.map((lead) => (
-              <TableRow key={lead.email}>
-                <TableCell>{lead.email}</TableCell>
-                <TableCell>{lead.firstName}</TableCell>
-                <TableCell>{lead.lastName}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {validLeads && <LeadsTable leads={validLeads} />}
     </Box>
   )
 }
