@@ -4,8 +4,20 @@ import { LeadsTable } from '@/components/LeadsTable';
 import { Lead } from '@/types/models';
 import { downloadStringAsFile } from '@/util/downloadStringAsFile';
 import { CsvParseOutput, parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput';
-import { Typography, Button, Box, Paper } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Typography, Button, Box } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { ChangeEvent, useState } from 'react';
+
+function signupLead (lead: Lead) {
+  return fetch('/api/fake-signup', {
+    method: 'POST',
+    body: JSON.stringify({ lead }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+}
 
 export default function Home() {
   const [csvOutput, setCsvOputput] = useState<CsvParseOutput | null>(null)
@@ -15,6 +27,16 @@ export default function Home() {
 
     setCsvOputput(output)
   }
+
+  const signupMutation = useMutation({
+    mutationFn: (leads: Lead[]) => {
+      const results = leads.map(lead => signupLead(lead))
+
+      return Promise.allSettled(results)
+    }
+  })
+
+  console.log(signupMutation.isPending)
 
   return (
     <Box height='100vh' padding={6} boxSizing='border-box' display='flex' flexDirection='column' gap={4}>
@@ -47,7 +69,6 @@ export default function Home() {
           </Button>
         </Box>
       </Box>
-
       {csvOutput && (
         <>
           <Box flex={1} >
@@ -57,8 +78,17 @@ export default function Home() {
           </Box>
 
           <Box display='flex' justifyContent='flex-end' alignItems='center' gap={2} borderTop='1px solid lightgray' paddingTop={2}>
-            <Typography color='GrayText'>{csvOutput.invalidLeads?.length} invalid leads were found</Typography>
-            <Button variant='contained'>Register {csvOutput.validLeads?.length} valid leads in skillmap</Button>
+            <Typography color='GrayText'>
+              {csvOutput.invalidLeads?.length} invalid leads were found
+            </Typography>
+            <LoadingButton
+              variant='contained'
+              loadingIndicator="Ok, hold on..." 
+              loading={signupMutation.isPending}
+              onClick={() => signupMutation.mutate(csvOutput.validLeads)}
+            >
+              Sign up {csvOutput.validLeads?.length} valid leads in skillmap
+            </LoadingButton>
           </Box>
         </>
       )}

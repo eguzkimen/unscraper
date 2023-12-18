@@ -1,5 +1,6 @@
 import { SKILLMAP_ACCESS_CODE, SKILLMAP_DEFAULT_PASS } from '@/configs';
 import { Lead } from '@/types/models';
+import { wait } from '@/util/wait';
 import { faker } from '@faker-js/faker';
 import { Sign } from 'crypto';
 import puppeteer from 'puppeteer';
@@ -16,15 +17,10 @@ const SIGN_UP_BUTTON_XPATH = `//*[@id="j-app-root"]/div/div/div/div/div/div[1]/a
 const SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH = `//*[@id="j-app-root"]/div/div/div/div/div/div[1]/form/button`
 const SUBMIT_NAME_BUTTON_XPATH = `//*[@id="j-app-root"]/div/div/form/button`
 
-function wait(ms: number = 500) {
-  return new Promise(resolve => setTimeout(() => resolve(true), ms))
-}
-
 type SignupResult = {
   success: boolean,
   message?: string
 }
-
 
 export async function signUpInSkillMap({ firstName, lastName, email }: Lead): Promise<SignupResult> {
   try {
