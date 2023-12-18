@@ -1,6 +1,6 @@
-import { Lead, LeadSchema } from "@/types/models";
-import { parse } from "csv-parse/sync";
-import { ChangeEvent } from "react";
+import { Lead, LeadSchema } from '@/types/models'
+import { parse } from 'csv-parse/sync'
+import { ChangeEvent } from 'react'
 
 export type CsvParseOutput = {
   validLeads: Lead[];
@@ -16,18 +16,18 @@ export async function parseLeadsFromCSVFileInput(event: ChangeEvent<HTMLInputEle
     const reader = new FileReader()
 
     reader.onload = async (e: ProgressEvent<FileReader>) => {
-      const text = e.target?.result as string;
-      const data = parse(text, { columns: true }) as unknown[];
+      const text = e.target?.result as string
+      const data = parse(text, { columns: true }) as unknown[]
 
       const validLeads: Lead[] = []
-      const invalidLeads: unknown[] = [];
+      const invalidLeads: unknown[] = []
 
       data.forEach((lead) => {
-        const parsed = LeadSchema.safeParse(lead);
+        const parsed = LeadSchema.safeParse(lead)
 
         if (!parsed.success) {
           invalidLeads.push(lead)
-          return;
+          return
         }
 
         validLeads.push(parsed.data)
@@ -38,11 +38,11 @@ export async function parseLeadsFromCSVFileInput(event: ChangeEvent<HTMLInputEle
         invalidLeads,
       }
 
-      resolve(response);
-    };
+      resolve(response)
+    }
 
-    reader.readAsText(file);
+    reader.readAsText(file)
   })
 
-  return p;
+  return p
 }

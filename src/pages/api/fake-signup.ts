@@ -11,7 +11,7 @@ export default async function handler(
   
   const parseResult = LeadSchema.safeParse(req.body.lead)
 
-  const randomlyFailed = Math.floor(Math.random() * 2) === 0;
+  const randomlyFailed = Math.floor(Math.random() * 2) === 0
 
   if (randomlyFailed) {
     return res.status(200).json({success: false, message: 'Unable to sign up' })

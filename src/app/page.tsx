@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { LeadsTable } from '@/components/LeadsTable';
-import { SignupResult } from '@/scrape/signupInSkillMap';
-import { Lead } from '@/types/models';
-import { downloadStringAsFile } from '@/util/downloadStringAsFile';
-import { CsvParseOutput, parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput';
-import { LoadingButton } from '@mui/lab';
-import { Typography, Button, Box } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
-import { ChangeEvent, useState } from 'react';
+import { LeadsTable } from '@/components/LeadsTable'
+import { SignupResult } from '@/scrape/signupInSkillMap'
+import { Lead } from '@/types/models'
+import { downloadStringAsFile } from '@/util/downloadStringAsFile'
+import { CsvParseOutput, parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput'
+import { LoadingButton } from '@mui/lab'
+import { Typography, Button, Box } from '@mui/material'
+import { useMutation } from '@tanstack/react-query'
+import { ChangeEvent, useState } from 'react'
 
 const REAL_URL = '/api/signup-in-skillmap'
 const TEST_URL = '/api/fake-signup'
 
 async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
-  const url = opts?.useTestUrl ? TEST_URL : REAL_URL;
+  const url = opts?.useTestUrl ? TEST_URL : REAL_URL
 
   const result = await fetch(url, {
     method: 'POST',
@@ -24,7 +24,7 @@ async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
     }
   })
 
-  return result.json() as Promise<SignupResult>;
+  return result.json() as Promise<SignupResult>
 }
 
 export default function Home() {

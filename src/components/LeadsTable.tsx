@@ -1,6 +1,6 @@
-import { SignupResult } from "@/scrape/signupInSkillMap"
-import { Lead } from "@/types/models"
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import { SignupResult } from '@/scrape/signupInSkillMap'
+import { Lead } from '@/types/models'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 
 interface Props {
   leads: Lead[]
