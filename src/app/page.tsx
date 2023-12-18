@@ -2,44 +2,20 @@
 
 import { Lead, LeadSchema } from '@/types/models';
 import { downloadStringAsFile } from '@/util/downloadStringAsFile';
+import { parseLeadsFromCSVFileInput } from '@/util/parseLeadsFromCsvFileInput';
 import { Typography, Button, Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { parse } from 'csv-parse/sync';
 import { ChangeEvent, useState } from 'react';
 
 export default function Home() {
-  const [leads, setLeads] = useState<Lead[] | null>(null)
-  const [invalidLeadsCount, setInvalidLeadsCount] = useState<number | null>(null)
+  const [validLeads, setValidLeads] = useState<Lead[] | null>(null)
+  const [invalidLeads, setInvalidLeads] = useState<unknown[] | null>(null)
 
-  function handleFileInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
+  async function handleFileInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { validLeads, invalidLeads } = await parseLeadsFromCSVFileInput(event)
 
-    if (!file) return 'No files found'
-
-    const reader = new FileReader()
-
-    reader.onload = async (e: ProgressEvent<FileReader>) => {
-      const text = e.target?.result as string;
-      const data = parse(text, { columns: true }) as unknown[];
-
-      const validLeads: Lead[] = []
-      let invalidCount: number = 0;
-
-      data.forEach((lead) => {
-        const parsed = LeadSchema.safeParse(lead);
-
-        if (!parsed.success) {
-          invalidCount += 1
-          return;
-        }
-
-        validLeads.push(parsed.data)
-      })
-
-      setLeads(validLeads)
-      setInvalidLeadsCount(invalidLeadsCount)
-    };
-
-    reader.readAsText(file);
+    setValidLeads(validLeads)
+    setInvalidLeads(invalidLeads)
   }
 
   return (
@@ -81,7 +57,7 @@ export default function Home() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {leads?.map((lead) => (
+            {validLeads?.map((lead) => (
               <TableRow key={lead.email}>
                 <TableCell>{lead.email}</TableCell>
                 <TableCell>{lead.firstName}</TableCell>
