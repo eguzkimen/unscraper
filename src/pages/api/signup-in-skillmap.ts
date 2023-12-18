@@ -1,4 +1,4 @@
-import { signUpInSkillMap } from '@/scrape/signupInSkillMap'
+import { signup } from '@/scrape/skillmap/signup'
 import { LeadSchema } from '@/types/models'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -16,7 +16,7 @@ export default function handler(
     return res.status(400).json({error: parseResult.error})
   }
 
-  signUpInSkillMap(parseResult.data).then((result) => {
+  signup(parseResult.data).then((result) => {
     res.status(200).json(result)
   })
 }

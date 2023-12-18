@@ -15,7 +15,7 @@ const SIGN_UP_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/a
 const SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/form/button'
 const SUBMIT_NAME_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/form/button'
 
-export async function signUpInSkillMap({ firstName, lastName, email }: Lead): Promise<SignupResult> {
+export async function signup({ firstName, lastName, email }: Lead): Promise<SignupResult> {
   try {
     const browser = await puppeteer.launch({ headless: true })
     const page = await browser.newPage()
