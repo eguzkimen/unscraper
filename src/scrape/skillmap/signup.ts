@@ -68,9 +68,11 @@ export async function signup({ firstName, lastName, email }: Lead): Promise<Sign
     await page.click('xpath/' + SUBMIT_NAME_BUTTON_XPATH)
 
     // Click 'skip this' button
-    await page.waitForXPath(SKIP_THIS_BUTTON_XPATH, {timeout: 12_000})
+    await page.waitForXPath(SKIP_THIS_BUTTON_XPATH, {timeout: 20_000})
     await wait()
     await page.click('xpath/' + SKIP_THIS_BUTTON_XPATH)
+
+    await wait()
 
     // Closing the browser here is important to avoid a memory leak
     await browser.close()

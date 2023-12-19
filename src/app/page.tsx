@@ -114,23 +114,28 @@ export default function Home() {
 
           <Box display='flex' justifyContent='flex-end' alignItems='center' gap={2} borderTop='1px solid lightgray' paddingTop={2}>
             <Typography color='GrayText'>
-              {csvOutput.invalidLeads?.length} invalid leads were found
+              {csvOutput.validLeads.length} valid and {csvOutput.invalidLeads?.length} invalid leads were found
             </Typography>
             <LoadingButton
               loading={loading}
+              loadingIndicator='Hold on...'
               variant='outlined'
               color='error'
               onClick={() => recurseOverLeads(csvOutput.validLeads, deleteLead)}
             >
-              Delete leads
+              <Box paddingX={1}>
+                Delete them all
+              </Box>
             </LoadingButton>
             <LoadingButton
               variant='contained'
-              loadingIndicator="Hold on..."
               loading={loading}
+              loadingIndicator='Doing the thing...'
               onClick={() => recurseOverLeads(csvOutput.validLeads, signupLead)}
             >
-              Sign up {csvOutput.validLeads?.length} valid leads
+              <Box paddingX={5}>
+                Sign up all valid leads
+              </Box>
             </LoadingButton>
           </Box>
         </>
