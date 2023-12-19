@@ -14,12 +14,12 @@ const EMAIL_INPUT_SELECTOR = '#textfield-1'
 const PASSWORD_INPUT_SELECTOR = '#textfield-2'
 
 export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
+  const browser = await puppeteer.launch({ headless: false })
+  const page = await browser.newPage()
+
+  page.setDefaultTimeout(3_000)
+  
   try {
-    const browser = await puppeteer.launch({ headless: false })
-    const page = await browser.newPage()
-
-    page.setDefaultTimeout(3_000)
-
     await page.goto('https://skillmap.app/mobile/guest/authentication')
 
     await wait()
@@ -63,12 +63,13 @@ export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
     await page.click('xpath/' + CONFIRM_DELETE_BUTTON_XPATH)
 
     // Closing the browser here is important to avoid a memory leak
-    // await browser.close()
-
+    await browser.close()
+    
     return {
       success: true
     }
   } catch (e) {
+    await browser.close()
     return {
       success: false,
       message: e instanceof Error ? e.message : JSON.stringify(e)

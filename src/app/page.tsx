@@ -8,21 +8,37 @@ import { LoadingButton } from '@mui/lab'
 import { Typography, Button, Box } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
 
-const REAL_URL = '/api/signup-in-skillmap'
-const TEST_URL = '/api/fake-signup'
+const REAL_SIGNUP_URL = '/api/signup-in-skillmap'
+const TEST_SIGNUP_URL = '/api/fake-signup'
+const DELETE_ACCOUNT_URL = '/api/delete-account'
 
-async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
-  const url = opts?.useTestUrl ? TEST_URL : REAL_URL
-
+async function post(url: string, body: string) {
   const result = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify({ lead }),
+    body,
     headers: {
       'Content-Type': 'application/json'
     }
   })
 
-  return result.json() as Promise<SignupResult>
+  return result.json()
+}
+
+async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
+  const url = opts?.useTestUrl ? TEST_SIGNUP_URL : REAL_SIGNUP_URL
+  const body = JSON.stringify({ lead })
+
+  const result: SignupResult = await post(url, body)
+
+  return result
+}
+
+async function deleteLead(lead: Lead) {
+  const body = JSON.stringify({ lead })
+
+  const result: SignupResult = await post(DELETE_ACCOUNT_URL, body)
+
+  return result
 }
 
 export default function Home() {
@@ -36,7 +52,7 @@ export default function Home() {
     setCsvOputput(output)
   }
 
-  async function signUpLeads (leads: Lead[], index: number = 0) {
+  async function signUpLeads(leads: Lead[], index: number = 0) {
     const lead = leads[index]
 
     if (!lead) {
@@ -46,11 +62,28 @@ export default function Home() {
 
     setLoading(true)
 
-    const result = await signupLead(lead, {useTestUrl: false})
+    const result = await signupLead(lead, { useTestUrl: false })
 
-    setResults((prevResults) => ({...prevResults, [lead.email]: result}))
+    setResults((prevResults) => ({ ...prevResults, [lead.email]: result }))
 
     signUpLeads(leads, index + 1)
+  }
+
+  async function deleteLeads(leads: Lead[], index: number = 0) {
+    const lead = leads[index]
+
+    if (!lead) {
+      setLoading(false)
+      return
+    }
+
+    setLoading(true)
+
+    const result = await deleteLead(lead)
+
+    setResults((prevResults) => ({ ...prevResults, [lead.email]: result }))
+
+    deleteLeads(leads, index + 1)
   }
 
   return (
@@ -85,7 +118,6 @@ export default function Home() {
             onClick={() => downloadStringAsFile('email,firstName,lastName\ntest-jane-doe@gmail.com,Jane,Doe', 'lead-data-template.csv')}
           >
             Download CSV Template
-
           </Button>
         </Box>
       </Box>
@@ -101,6 +133,14 @@ export default function Home() {
             <Typography color='GrayText'>
               {csvOutput.invalidLeads?.length} invalid leads were found
             </Typography>
+            <LoadingButton
+              loading={loading}
+              variant='outlined'
+              color='error'
+              onClick={() => deleteLeads(csvOutput.validLeads)}
+            >
+              Delete leads
+            </LoadingButton>
             <LoadingButton
               variant='contained'
               loadingIndicator="Ok, hold on..."
