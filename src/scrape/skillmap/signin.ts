@@ -9,7 +9,7 @@ const SIGN_IN_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div[1]/form/
 
 export async function signup({ email }: Lead): Promise<SignupResult> {
   try {
-    const browser = await puppeteer.launch({ headless: false })
+    const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
     page.setDefaultTimeout(3_000)

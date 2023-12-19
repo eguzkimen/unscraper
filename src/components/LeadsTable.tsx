@@ -12,9 +12,9 @@ export function LeadsTable({ leads, results }: Props) {
     const result = results[lead.email]
 
     if (!result) return '...'
-    if (result.success) return 'SIGNED UP SUCCESSFULLY'
+    if (result.success) return 'SUCCESS: ' + result.message
 
-    return 'FAILED TO SIGN UP: ' + result.message
+    return 'FAILED: ' + result.message
   }
 
   return (

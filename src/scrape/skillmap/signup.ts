@@ -17,18 +17,16 @@ const SUBMIT_NAME_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/form/button'
 const SKIP_THIS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/header/div/button'
 
 export async function signup({ firstName, lastName, email }: Lead): Promise<SignupResult> {
-  const browser = await puppeteer.launch({ headless: false })
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
   page.setDefaultTimeout(3_000)
   
   try {
     await page.goto('https://skillmap.app/mobile/guest/authentication/register')
-
-    await wait()
     
     // Accept cookies
-    await page.waitForXPath(ACCEPT_COOKIES_BUTTON_XPATH)
+    await page.waitForXPath(ACCEPT_COOKIES_BUTTON_XPATH, {timeout: 5_000})
     await wait()
     await page.click('xpath/' + ACCEPT_COOKIES_BUTTON_XPATH)
 
@@ -38,7 +36,6 @@ export async function signup({ firstName, lastName, email }: Lead): Promise<Sign
 
     // Click next
     await page.waitForXPath(SUBMIT_ACCESS_CODE_BUTTON_XPATH)
-    await wait()
     await page.click('xpath/' + SUBMIT_ACCESS_CODE_BUTTON_XPATH)
 
     // Click sign up with email
@@ -56,7 +53,6 @@ export async function signup({ firstName, lastName, email }: Lead): Promise<Sign
 
     // Click next
     await page.waitForXPath(SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH)
-    await wait()
     await page.click('xpath/' + SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH)
 
     // Type firstName
@@ -69,7 +65,6 @@ export async function signup({ firstName, lastName, email }: Lead): Promise<Sign
 
     // Click next
     await page.waitForXPath(SUBMIT_NAME_BUTTON_XPATH)
-    await wait()
     await page.click('xpath/' + SUBMIT_NAME_BUTTON_XPATH)
 
     // Click 'skip this' button
@@ -81,7 +76,8 @@ export async function signup({ firstName, lastName, email }: Lead): Promise<Sign
     await browser.close()
     
     return {
-      success: true
+      success: true,
+      message: 'Sign up successful'
     }
   } catch (e) {
     // Closing the browser here is important to avoid a memory leak

@@ -14,18 +14,16 @@ const EMAIL_INPUT_SELECTOR = '#textfield-1'
 const PASSWORD_INPUT_SELECTOR = '#textfield-2'
 
 export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
-  const browser = await puppeteer.launch({ headless: false })
+  const browser = await puppeteer.launch()
   const page = await browser.newPage()
 
   page.setDefaultTimeout(3_000)
   
   try {
     await page.goto('https://skillmap.app/mobile/guest/authentication')
-
-    await wait()
     
     // Accept cookies
-    await page.waitForXPath(ACCEPT_COOKIES_BUTTON_XPATH)
+    await page.waitForXPath(ACCEPT_COOKIES_BUTTON_XPATH, {timeout: 5_000})
     await wait()
     await page.click('xpath/' + ACCEPT_COOKIES_BUTTON_XPATH)
 
@@ -39,7 +37,6 @@ export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
 
     // Click Sign In
     await page.waitForXPath(SIGN_IN_BUTTON_XPATH)
-    await wait()
     await page.click('xpath/' + SIGN_IN_BUTTON_XPATH)
 
     // Click Profile button
@@ -66,7 +63,8 @@ export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
     await browser.close()
     
     return {
-      success: true
+      success: true,
+      message: 'Deletion successful'
     }
   } catch (e) {
     await browser.close()

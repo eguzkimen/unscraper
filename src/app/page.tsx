@@ -10,7 +10,7 @@ import { ChangeEvent, useState } from 'react'
 
 const REAL_SIGNUP_URL = '/api/signup-in-skillmap'
 const TEST_SIGNUP_URL = '/api/fake-signup'
-const DELETE_ACCOUNT_URL = '/api/delete-account'
+const DELETE_ACCOUNT_URL = '/api/delete-skillmap-account'
 
 async function post(url: string, body: string) {
   const result = await fetch(url, {
@@ -52,7 +52,7 @@ export default function Home() {
     setCsvOputput(output)
   }
 
-  async function signUpLeads(leads: Lead[], index: number = 0) {
+  async function recurseOverLeads(leads: Lead[], callback: (lead: Lead) => Promise<SignupResult>, index: number = 0) {
     const lead = leads[index]
 
     if (!lead) {
@@ -62,28 +62,11 @@ export default function Home() {
 
     setLoading(true)
 
-    const result = await signupLead(lead, { useTestUrl: false })
+    const result = await callback(lead,)
 
     setResults((prevResults) => ({ ...prevResults, [lead.email]: result }))
 
-    signUpLeads(leads, index + 1)
-  }
-
-  async function deleteLeads(leads: Lead[], index: number = 0) {
-    const lead = leads[index]
-
-    if (!lead) {
-      setLoading(false)
-      return
-    }
-
-    setLoading(true)
-
-    const result = await deleteLead(lead)
-
-    setResults((prevResults) => ({ ...prevResults, [lead.email]: result }))
-
-    deleteLeads(leads, index + 1)
+    recurseOverLeads(leads, callback, index + 1)
   }
 
   return (
@@ -137,17 +120,17 @@ export default function Home() {
               loading={loading}
               variant='outlined'
               color='error'
-              onClick={() => deleteLeads(csvOutput.validLeads)}
+              onClick={() => recurseOverLeads(csvOutput.validLeads, deleteLead)}
             >
               Delete leads
             </LoadingButton>
             <LoadingButton
               variant='contained'
-              loadingIndicator="Ok, hold on..."
+              loadingIndicator="Hold on..."
               loading={loading}
-              onClick={() => signUpLeads(csvOutput.validLeads)}
+              onClick={() => recurseOverLeads(csvOutput.validLeads, signupLead)}
             >
-              Sign up {csvOutput.validLeads?.length} valid leads in skillmap
+              Sign up {csvOutput.validLeads?.length} valid leads
             </LoadingButton>
           </Box>
         </>
