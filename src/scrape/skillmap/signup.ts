@@ -16,8 +16,8 @@ const SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/di
 const SUBMIT_NAME_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/form/button'
 const SKIP_THIS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/header/div/button'
 
-export async function signup({ firstName, lastName, email }: Lead): Promise<SignupResult> {
-  const browser = await puppeteer.launch()
+export async function signup({ firstName, lastName, email }: Lead, headless: boolean = true): Promise<SignupResult> {
+  const browser = await puppeteer.launch({ headless })
   const page = await browser.newPage()
 
   page.setDefaultTimeout(3_000)

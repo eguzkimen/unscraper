@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab'
 import { Typography, Button, Box } from '@mui/material'
 import { ChangeEvent, useState } from 'react'
 
-const REAL_SIGNUP_URL = '/api/signup-in-skillmap'
+const REAL_SIGNUP_URL = '/api/try-sign-in-then-sign-up'
 const TEST_SIGNUP_URL = '/api/fake-signup'
 const DELETE_ACCOUNT_URL = '/api/delete-skillmap-account'
 
@@ -26,7 +26,7 @@ async function post(url: string, body: string) {
 
 async function signupLead(lead: Lead, opts?: { useTestUrl: boolean }) {
   const url = opts?.useTestUrl ? TEST_SIGNUP_URL : REAL_SIGNUP_URL
-  const body = JSON.stringify({ lead })
+  const body = JSON.stringify({ lead, headless: false })
 
   const result: SignupResult = await post(url, body)
 

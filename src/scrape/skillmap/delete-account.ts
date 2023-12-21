@@ -13,8 +13,8 @@ const CONFIRM_DELETE_BUTTON_XPATH = '/html/body/div[5]/div/div/button[1]'
 const EMAIL_INPUT_SELECTOR = '#textfield-1'
 const PASSWORD_INPUT_SELECTOR = '#textfield-2'
 
-export async function deleteAccount({ email }: Lead): Promise<SignupResult> {
-  const browser = await puppeteer.launch()
+export async function deleteAccount({ email }: Lead, headless: boolean = true): Promise<SignupResult> {
+  const browser = await puppeteer.launch({headless})
   const page = await browser.newPage()
 
   page.setDefaultTimeout(3_000)
