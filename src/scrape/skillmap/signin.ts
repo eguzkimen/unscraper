@@ -10,7 +10,7 @@ const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[3]/div[3]/div[2]/div[2]/butt
 const REACH_YOUR_GOALS_FASTER_XPATH = '//*[@id="j-app-root"]/div/div/div[1]/div[3]/p[1]/span'
 
 export async function signin({ email }: Lead, headless: boolean = true): Promise<SignupResult> {
-  const browser = await puppeteer.launch({ headless})
+  const browser = await puppeteer.launch({ headless })
   const page = await browser.newPage()
 
   page.setDefaultTimeout(3_000)

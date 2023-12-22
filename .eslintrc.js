@@ -9,7 +9,9 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:@next/next/recommended'
+    'plugin:@next/next/recommended',
+    'some-other-config-you-use',
+    'prettier'
   ],
   settings: {
     react: {
