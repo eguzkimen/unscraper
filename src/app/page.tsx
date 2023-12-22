@@ -37,7 +37,7 @@ async function post(url: string, body: string) {
 
 async function signupLead(lead: Lead) {
   const url = REAL_SIGNUP_URL;
-  const body = JSON.stringify({ lead, headless: true });
+  const body = JSON.stringify({ lead, headless: false });
 
   const result: SignupResult = await post(url, body);
 
@@ -271,7 +271,7 @@ export default function Home() {
               loading={loading}
               loadingIndicator="Doing the thing..."
               onClick={() =>
-                recurseOverLeads(csvOutput.validLeads, signupLeadFake)
+                recurseOverLeads(csvOutput.validLeads, signupLead)
               }
             >
               <Box paddingX={5}>Sign up all valid leads</Box>

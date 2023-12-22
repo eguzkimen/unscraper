@@ -3,7 +3,7 @@ import { Lead, SignupResult } from '@/types/models'
 import { wait } from '@/util/wait'
 import puppeteer from 'puppeteer'
 
-const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[3]/div[3]/div[2]/div[2]/button[1]'
+const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[4]/div[3]/div[2]/div[2]/button[1]'
 const SIGN_IN_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div[1]/form/button'
 const PROFILE_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div[1]/div[1]/div[2]/div/a'
 const ACCOUNT_SETTINGS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div[1]/main/div[3]/div[2]/div[1]'
