@@ -156,10 +156,10 @@ export default function Home() {
         </Typography>
         <ol>
           <li>
-            <Typography variant="body1">Download the csv template</Typography>
+            <Typography variant="body1">Download the template</Typography>
           </li>
           <li>
-            <Typography variant="body1">Fill it up with your leads</Typography>
+            <Typography variant="body1">Fill it up with your leads using excel, sheets, numbers, etc</Typography>
           </li>
           <li>
             <Typography variant="body1">Upload it here</Typography>
@@ -199,7 +199,7 @@ export default function Home() {
                 )
               }
             >
-              Download CSV Template
+              Download Template
             </Button>
           </Box>
           {csvOutput && (
@@ -224,7 +224,14 @@ export default function Home() {
                   Pending ({leadsPerStatus.pending.length})
                 </ToggleButton>
               </ToggleButtonGroup>
-              <Button variant="outlined" startIcon={<FileDownload />}>
+              <Button
+                variant="outlined"
+                startIcon={<FileDownload />}
+                onClick={() =>
+                  filteredLeads &&
+                  exportLeads(filteredLeads, `${filter}-leads.csv`)
+                }
+              >
                 Download CSV
               </Button>
             </Box>

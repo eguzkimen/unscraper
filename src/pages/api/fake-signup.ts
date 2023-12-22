@@ -14,12 +14,12 @@ export default async function handler(
   const randomlyFailed = Math.floor(Math.random() * 2) === 0
 
   if (randomlyFailed) {
-    return res.status(200).json({success: false, message: 'Unable to sign up' })
+    return res.status(200).json({success: false, message: 'FAKE: Unable to sign up' })
   }
 
   if (!parseResult.success) {
     return res.status(200).json({success: false, message: parseResult.error})
   }
 
-  res.status(200).json({success: true})
+  res.status(200).json({ success: true, message: 'FAKE: Sign up successful'})
 }
