@@ -9,7 +9,7 @@ const PASSWORD_INPUT_SELECTOR = '#textfield-3'
 const FIRST_NAME_INPUT_SELECTOR = '#textfield-4'
 const LAST_NAME_INPUT_SELECTOR = '#textfield-5'
 
-const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[4]/div[3]/div[2]/div[2]/button[1]'
+const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[3]/div[3]/div[2]/div[2]/button[1]'
 const SUBMIT_ACCESS_CODE_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div/form/button'
 const SIGN_UP_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/a'
 const SUBMIT_EMAIL_AND_PASS_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div/div[1]/form/button'

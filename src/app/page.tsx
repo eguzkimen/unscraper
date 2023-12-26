@@ -72,12 +72,10 @@ function getSuccessStatus(result: SignupResult | undefined): SuccessStatus {
 }
 
 async function exportLeads(leads: Lead[], filename: string) {
-  let csvString = "email,firstName,lastName";
-
-  leads.forEach(
+  let csvString = leads.map(
     (lead) =>
-      (csvString += `\n${lead.email},${lead.firstName},${lead.lastName}`)
-  );
+      `${lead.email},${lead.firstName},${lead.lastName}`
+  ).join('\n')
 
   downloadStringAsFile(csvString, filename);
 }

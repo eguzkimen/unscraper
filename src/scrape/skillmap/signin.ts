@@ -6,7 +6,7 @@ import puppeteer from 'puppeteer'
 const EMAIL_INPUT_SELECTOR = '#textfield-1'
 const PASSWORD_INPUT_SELECTOR = '#textfield-2'
 const SIGN_IN_BUTTON_XPATH = '//*[@id="j-app-root"]/div/div/div/div/div[1]/form/button'
-const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[4]/div[3]/div[2]/div[2]/button[1]'
+const ACCEPT_COOKIES_BUTTON_XPATH = '/html/body/div[3]/div[3]/div[2]/div[2]/button[1]'
 const REACH_YOUR_GOALS_FASTER_XPATH = '//*[@id="j-app-root"]/div/div/div[1]/div[3]/p[1]/span'
 
 export async function signin({ email }: Lead, headless: boolean = true): Promise<SignupResult> {
